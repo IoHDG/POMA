@@ -1,2 +1,3 @@
-# POMA
-Parental Observation and Management App
+# Steam Scraper
+Steam Website Scraper Application
+
