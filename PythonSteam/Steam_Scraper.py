@@ -8,13 +8,14 @@
 
 #pip install bs4
 #python
-
+import urllib
 import bs4
 from urllib.request import urlopen as uReq
 from bs4 import BeautifulSoup as soup
+from bs4 import BeautifulSoup as BSHTML
 
 my_url = 'http://store.steampowered.com/'
-
+page = 'http://store.steampowered.com/'
 # opening connection, taking the page
 uClient = uReq(my_url)
 page_html = uClient.read()
@@ -27,7 +28,8 @@ page_soup = soup(page_html,"html.parser")
 containers = page_soup.findAll("div",{"id":"tab_topsellers_content"})
 
 #Image Links
-imgs = page_soup.findAll("div",{"id":"tab_autumnsale_topsellers_content"})
+imgs = page_soup.findAll("div",{"id":"tab_content"})
+
 
 
 # 1 Product
@@ -56,7 +58,7 @@ imgs = page_soup.findAll("div",{"id":"tab_autumnsale_topsellers_content"})
 
 #Loop 
 
-filename = "games.csv"
+filename = "games.xml"
 f = open(filename, "w")
 
 headers = "game, price, tag, tag2, tag3, tag4, image_link \n"
@@ -83,19 +85,18 @@ for container in containers:
 	#game_id = container.string for link in item.find_all(id='data-ds-appid')
 
 #Image
-	soup = BSHTML(htmlText)
-	game_image = imgs.find("img",{"class":"sale_capsule_image"})
+game_image = container.findAll('img')[0].get('src')
 
 
 
-	print("game_name: " + product_name)
-	print("price: " + price)
-	print("tags: " + tag)
-	#print("ID: "+ game_id)
-	print("Game_Link: " + game_image['src'])
+print("game_name: " + product_name)
+print("price: " + price)
+print("tags: " + tag)
+print("Game Link " + game_image)
 
 
-	f.write(product_name + "," + price.replace(",",".") + (",") + tag.replace(","," ") + "\n"  )
+
+f.write(product_name + "," + price.replace(",",".") + (",") + tag.replace(","," ") +(",")+ game_image + "\n"  )
 
 #Second Product
 
@@ -113,5 +114,5 @@ for container in containers:
 	#print("price: " + price)
 
 
-	f.close()
+f.close()
 
